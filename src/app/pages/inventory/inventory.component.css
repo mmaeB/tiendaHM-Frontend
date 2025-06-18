@@ -1,0 +1,27 @@
+mat-form-field {
+  width: 300px;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+button {
+  margin-right: 8px;
+}
+
+mat-paginator {
+  margin-top: 20px;
+}
+
+button[mat-fab] {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}

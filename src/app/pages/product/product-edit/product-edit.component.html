@@ -1,0 +1,57 @@
+<form class="example-container" [formGroup]="form" (submit)="operate()">
+<div [hidden]="true">
+        <mat-form-field>
+            <input matInput placeholder="ID" formControlName="idProduct">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field>
+        <input matInput placeholder="nombre" formControlName="nombre">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="marca" formControlName="marca">
+    </mat-form-field>
+
+    
+        <mat-form-field>
+        <input matInput placeholder="genero" formControlName="genero">
+    </mat-form-field>
+
+        
+      <mat-form-field>
+        <input matInput placeholder="talla" formControlName="talla">
+    </mat-form-field>
+
+        <mat-form-field>
+        <input matInput placeholder="equipo" formControlName="equipo">
+    </mat-form-field>
+    
+
+
+        <mat-form-field>
+        <input matInput placeholder="stock" formControlName="stock">
+    </mat-form-field>   
+ 
+
+
+<mat-form-field appearance="fill">
+  <mat-label>Categories</mat-label>
+  <mat-select formControlName="category">
+    @for (c of categories; track $index) {
+      <mat-option [value]="c">{{ c.nombre }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+
+    <button mat-button type="submit">
+        <mat-icon>done</mat-icon>
+        <span>Done</span>
+    </button>
+
+    <button mat-button type="button" routerLink="/pages/book">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancel</span>
+    </button>
+</form>
