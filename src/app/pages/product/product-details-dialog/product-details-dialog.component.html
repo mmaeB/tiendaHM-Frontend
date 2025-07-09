@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" class="toolbar-title">
+  <mat-icon>visibility</mat-icon>
+  <span style="margin-left: 8px;">Detalles del Producto</span>
+</mat-toolbar>
+
+<div class="detalle-container">
+  <mat-card class="detalle-card">
+
+    <!-- Imagen centrada -->
+    <div class="imagen-container" *ngIf="producto.imagen">
+      <img [src]="'http://localhost:9090/uploads/' + producto.imagen" alt="Imagen del producto" />
+    </div>
+
+    <mat-card-content>
+      <h2 class="producto-nombre">{{ producto.nombre }}</h2>
+      <p class="categoria">Categoría: {{ producto.category?.nombre }}</p>
+
+      <div class="detalle-datos">
+        <div><strong>Precio:</strong> S/. {{ producto.precio }}</div>
+        <div><strong>Marca:</strong> {{ producto.marca || '-' }}</div>
+        <div><strong>Talla:</strong> {{ producto.talla || '-' }}</div>
+        <div><strong>Género:</strong> {{ producto.genero || '-' }}</div>
+        <div><strong>Equipo:</strong> {{ producto.equipo || '-' }}</div>
+        <div><strong>Stock:</strong> {{ producto.stock }}</div>
+      </div>
+
+      <div class="descripcion">
+        <strong>Descripción:</strong>
+        <p>{{ producto.descripcion || '-' }}</p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button mat-dialog-close color="primary">Cerrar</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,11 +1,12 @@
 import { Client } from './client';
-import { Product } from './product';
+import { Producto } from './producto';
 
 export interface Booking {
-  id_booking: number;
+  idBooking: number;
+  client: Client;
+
+  product: Producto;
   cantidad: number;
+  fechaReserva:Date; 
   estado: string;
-  fecha_reserva: string;
-  client?: Client;
-  product?: Product;
 }

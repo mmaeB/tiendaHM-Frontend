@@ -1,40 +1,25 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { Inventory } from '../model/inventory';
+import { Subject } from 'rxjs';
+import { GenericService } from './generic.service';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InventoryService {
-  private url: string = `${environment.HOST}/api/inventory`;
+export class InventoryService extends GenericService<Inventory>{
+  private inventoryChange: Subject<Inventory[]> = new Subject<Inventory[]>;
+  private messageChange: Subject<string> = new Subject<string>;
 
-  private inventoryChange = new Subject<Inventory[]>();
-  private messageChange = new Subject<string>();
-
-  constructor(private http: HttpClient) {}
-
-  findAll() {
-    return this.http.get<Inventory[]>(this.url);
+  constructor() {
+    super(
+      inject(HttpClient),
+      `${environment.HOST}/inventories`
+    );
   }
 
-  findById(id: number) {
-    return this.http.get<Inventory>(`${this.url}/${id}`);
-  }
-
-  save(inventory: Inventory) {
-    return this.http.post(this.url, inventory);
-  }
-
-  update(id: number, inventory: Inventory) {
-    return this.http.put(`${this.url}/${id}`, inventory);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
-  }
-
+  ///////////////////////////////////
   setInventoryChange(data: Inventory[]) {
     this.inventoryChange.next(data);
   }

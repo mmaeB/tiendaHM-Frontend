@@ -1,0 +1,69 @@
+<router-outlet></router-outlet>
+
+<!-- Filtro -->
+<mat-form-field appearance="fill">
+  <mat-label>Buscar</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar categoría por nombre o estado" />
+</mat-form-field>
+
+<!-- Tabla -->
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+  <!-- ID -->
+  <ng-container matColumnDef="idCategory">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+    <td mat-cell *matCellDef="let item"> {{ item.idCategory }} </td>
+  </ng-container>
+
+  <!-- Nombre -->
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+    <td mat-cell *matCellDef="let item"> {{ item.nombre }} </td>
+  </ng-container>
+
+  <!-- Descripción -->
+  <ng-container matColumnDef="descripcion">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+    <td mat-cell *matCellDef="let item"> {{ item.descripcion || '-' }} </td>
+  </ng-container>
+
+  <!-- Estado -->
+  <ng-container matColumnDef="estado">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+    <td mat-cell *matCellDef="let item">
+        <span [style.color]="item.estado ? 'green' : 'red'">
+        {{ item.estado ? 'Activo' : 'Inactivo' }}
+        </span>
+    </td>
+  </ng-container>
+
+  <!-- Acciones -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let item">
+      <button mat-button color="accent" (click)="openDialog(item)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-button color="warn" (click)="delete(item.idCategory)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <!-- Encabezados y filas -->
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+  <tr mat-row *matRowDef="let item; columns: getDisplayedColumns();"></tr>
+</table>
+
+<!-- Paginador -->
+<mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons aria-label="Paginador de categorías">
+</mat-paginator>
+
+<!-- Botón flotante -->
+<button mat-fab
+        color="primary"
+        aria-label="Agregar nueva categoría"
+        style="float: right; margin-top: 16px;"
+        (click)="openDialog()">
+  <mat-icon>add</mat-icon>
+</button>

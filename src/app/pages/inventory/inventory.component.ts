@@ -1,96 +1,105 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { InventoryService } from '../../services/inventory.service';
-import { Inventory } from '../../model/inventory';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { switchMap } from 'rxjs';
+import { Inventory } from '../../model/inventory';
+import { InventoryService } from '../../services/inventory.service';
+import { InventoryDialogComponent } from './inventory-dialog/inventory-dialog.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-inventory',
-  templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css'],
   standalone: true,
+  templateUrl: './inventory.component.html',
+  styleUrl: './inventory.component.css',
   imports: [
-    CommonModule,
-    RouterModule,
     MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatInput,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
+    MatPaginatorModule,
+    MatSortModule,
+    RouterOutlet,
+    MatSnackBarModule,
+    MatDialogModule,
+    CommonModule
   ]
 })
-export class InventoryComponent implements OnInit {
+export class InventoryComponent {
   dataSource: MatTableDataSource<Inventory>;
 
-columnsDefinitions = [
-  { def: 'nombreProducto', label: 'Nombre Producto', hide: false },
-  { def: 'stockActual', label: 'Stock Actual', hide: false },
-  { def: 'stockMinimo', label: 'Stock Mínimo', hide: false },
-  { def: 'ultimaActualizacion', label: 'Última Actualización', hide: false },
-  { def: 'idProduct', label: 'ID Producto', hide: true } 
-];
-
+  columnsDefinitions = [
+    { def: 'idInventory', label: 'ID', hide: true },
+    { def: 'producto', label: 'Producto', hide: false },
+    { def: 'stockActual', label: 'Stock Actual', hide: false },
+    { def: 'stockMinimo', label: 'Stock Mínimo', hide: false },
+    { def: 'ultimaActualizacion', label: 'Última Actualización', hide: false },
+    { def: 'actions', label: 'Acciones', hide: false }
+  ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private inventoryService: InventoryService,
-    private snackBar: MatSnackBar
+    private _dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.inventoryService.findAll().subscribe((data) => {
-      this.createTable(data);
-    });
-
-    this.inventoryService.getMessageChange().subscribe((data) => {
-      this.snackBar.open(data, 'INFO', {
+    this.inventoryService.findAll().subscribe(data => this.createTable(data));
+    this.inventoryService.getInventoryChange().subscribe(data => this.createTable(data));
+    this.inventoryService.getMessageChange().subscribe(msg =>
+      this._snackBar.open(msg, 'INFO', {
         duration: 2000,
         horizontalPosition: 'right',
-        verticalPosition: 'bottom',
-      });
-    });
+        verticalPosition: 'bottom'
+      })
+    );
   }
 
-  createTable(data: Inventory[]) {
+  createTable(data: Inventory[]): void {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  getDisplayedColumns() {
-    return this.columnsDefinitions
-      .filter((cd) => !cd.hide)
-      .map((cd) => cd.def);
+  applyFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = value.trim().toLowerCase();
   }
 
-  applyFilter(e: any) {
-    this.dataSource.filter = e.target.value.trim().toLowerCase();
+  getDisplayedColumns(): string[] {
+    return this.columnsDefinitions.filter(c => !c.hide).map(c => c.def);
   }
 
-  delete(id: number) {
-    this.inventoryService
-      .delete(id)
+  delete(id: number): void {
+    this.inventoryService.delete(id)
       .pipe(switchMap(() => this.inventoryService.findAll()))
-      .subscribe((data) => {
+      .subscribe(data => {
         this.inventoryService.setInventoryChange(data);
-        this.inventoryService.setMessageChange('Inventario eliminado');
+        this.inventoryService.setMessageChange('¡Inventario eliminado!');
       });
+  }
+
+  openDialog(inventory?: Inventory): void {
+    this._dialog.open(InventoryDialogComponent, {
+      width: '600px',
+      data: inventory,
+      autoFocus: true
+    });
+  }
+
+  formatFecha(fecha: string): string {
+    return new Date(fecha).toLocaleString(); // <-- Solución reemplazo de | date:'short'
   }
 }

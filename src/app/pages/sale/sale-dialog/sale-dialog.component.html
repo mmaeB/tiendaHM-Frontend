@@ -1,0 +1,45 @@
+<mat-dialog-content>
+  <mat-toolbar>
+    <span>Información de Venta</span>
+  </mat-toolbar>
+
+  <div class="example-container">
+
+    <!-- Cliente -->
+    <mat-form-field appearance="fill">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="sale.client">
+        @for (c of clients; track c) {
+          <mat-option [value]="c">{{ c.nombre }} {{ c.apellido }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Producto -->
+    <mat-form-field appearance="fill">
+      <mat-label>Producto</mat-label>
+      <mat-select [(ngModel)]="sale.product">
+        @for (p of productos; track p) {
+          <mat-option [value]="p">{{ p.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Cantidad -->
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Cantidad" type="number" [(ngModel)]="sale.cantidad" />
+    </mat-form-field>
+
+    <!-- Fecha de venta -->
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Fecha de Venta" type="datetime-local"
+             [(ngModel)]="sale.fechaVenta" />
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-button color="primary" (click)="operate()">Guardar</button>
+      <button mat-button color="warn" (click)="close()">Cancelar</button>
+    </div>
+  </div>
+</mat-dialog-content>

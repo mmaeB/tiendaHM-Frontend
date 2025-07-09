@@ -1,0 +1,53 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
+
+<form class="login-form" #loginForm="ngForm" (submit)="login()">
+  <div class="background"></div>
+
+  <mat-card class="login-card">
+    <img src="lectorium.png" alt="Logo HM" class="login-logo" />
+
+    <mat-card-header>
+      <mat-card-title class="app-title">Bienvenido Tienda HM</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="input-group">
+        <i class="bi bi-person-fill icon-left"></i>
+        <input
+          matInput
+          placeholder="Usuario"
+          name="username"
+          [(ngModel)]="username"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <i class="bi bi-lock-fill icon-left"></i>
+        <input
+          matInput
+          type="password"
+          placeholder="Contraseña"
+          name="password"
+          [(ngModel)]="password"
+          required
+        />
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button type="submit" [disabled]="!loginForm.valid">
+        <i class="bi bi-box-arrow-in-right"></i> Ingresar
+      </button>
+    </mat-card-actions>
+
+    <div class="additional-links">
+      <a routerLink="/forgot">¿Olvidaste tu contraseña?</a>
+      <span class="separator">|</span>
+      <a routerLink="/new-user">Crear cuenta</a>
+    </div>
+  </mat-card>
+</form>

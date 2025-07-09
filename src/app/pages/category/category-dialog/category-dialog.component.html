@@ -1,0 +1,36 @@
+<mat-dialog-content>
+  <mat-toolbar color="primary">
+    <span>Formulario de Categoría</span>
+  </mat-toolbar>
+
+  <div class="example-container">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="category.nombre" />
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <input matInput [(ngModel)]="category.descripcion" />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="category.estado">
+        <mat-option [value]="true">Activo</mat-option>
+        <mat-option [value]="false">Inactivo</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-raised-button color="primary" (click)="operate()">Guardar</button>
+      <button mat-raised-button color="warn" (click)="close()">Cancelar</button>
+    </div>
+
+  </div>
+</mat-dialog-content>

@@ -92,3 +92,9 @@ Generar un archivo de centralización de las importaciones
 ```bash
 ng generate module material
 ```
+
+Instalar auth0/angular-jwt. Esta libreria ayuda, tiene utilitarios para ver si el token ha expirado o no
+
+```bash
+npm install @auth0/angular-jwt
+```

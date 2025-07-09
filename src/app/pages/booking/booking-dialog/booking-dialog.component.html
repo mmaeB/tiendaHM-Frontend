@@ -1,0 +1,51 @@
+<mat-dialog-content>
+  <mat-toolbar><span>Booking Info</span></mat-toolbar>
+
+  <div class="example-container">
+<!-- Cliente -->
+<mat-form-field appearance="fill">
+  <mat-label>Cliente</mat-label>
+  <mat-select [(ngModel)]="booking.client" [compareWith]="compareClient">
+    @for (c of clients; track c) {
+      <mat-option [value]="c">{{ c.nombre }} {{ c.apellido }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<!-- Producto -->
+<mat-form-field appearance="fill">
+  <mat-label>Producto</mat-label>
+  <mat-select [(ngModel)]="booking.product" [compareWith]="compareProduct">
+    @for (p of productos; track p) {
+      <mat-option [value]="p">{{ p.nombre }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+    <!-- Cantidad -->
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Cantidad" type="number" [(ngModel)]="booking.cantidad" />
+    </mat-form-field>
+
+    <!-- Fecha de reserva -->
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Fecha de Reserva" type="datetime-local"
+             [(ngModel)]="booking.fechaReserva" />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="booking.estado">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="Confirmado">Confirmado</mat-option>
+        <mat-option value="Cancelado">Cancelado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-button color="primary" (click)="operate()">Done</button>
+      <button mat-button color="warn" (click)="close()">Cancel</button>
+    </div>
+  </div>
+</mat-dialog-content>

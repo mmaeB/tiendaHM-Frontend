@@ -1,27 +1,17 @@
-.table-container {
-  padding: 20px;
-}
-
-mat-form-field {
-  width: 300px;
-}
-
-.table-container > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-button[mat-raised-button] {
-  margin-left: 12px;
-}
-
 table {
   width: 100%;
-  margin-top: 10px;
 }
 
-mat-paginator {
-  margin-top: 10px;
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
 }
+
+/* td, th {
+  width: 25%;
+} */
+
+.actions{
+  width: 160px;
+}
+  

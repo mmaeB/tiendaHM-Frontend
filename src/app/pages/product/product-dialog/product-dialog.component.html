@@ -1,0 +1,91 @@
+<mat-dialog-content>
+  <mat-toolbar color="primary">
+    <span>Formulario de Producto</span>
+  </mat-toolbar>
+
+  <div class="example-container">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="producto.nombre" />
+    </mat-form-field>
+
+    <!-- Categoría -->
+    <mat-form-field appearance="fill">
+      <mat-label>Categoría</mat-label>
+      <mat-select [(ngModel)]="producto.category">
+        <mat-option *ngFor="let cat of category" [value]="cat">
+          {{ cat.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Precio -->
+    <mat-form-field appearance="fill">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" [(ngModel)]="producto.precio" />
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <input matInput [(ngModel)]="producto.descripcion" />
+    </mat-form-field>
+
+    <!-- Marca -->
+    <mat-form-field appearance="fill">
+      <mat-label>Marca</mat-label>
+      <input matInput [(ngModel)]="producto.marca" />
+    </mat-form-field>
+
+    <!-- Talla -->
+    <mat-form-field appearance="fill">
+      <mat-label>Talla</mat-label>
+      <input matInput [(ngModel)]="producto.talla" />
+    </mat-form-field>
+
+    <!-- Género -->
+    <mat-form-field appearance="fill">
+      <mat-label>Género</mat-label>
+      <input matInput [(ngModel)]="producto.genero" />
+    </mat-form-field>
+
+    <!-- Equipo -->
+    <mat-form-field appearance="fill">
+      <mat-label>Equipo</mat-label>
+      <input matInput [(ngModel)]="producto.equipo" />
+    </mat-form-field>
+<!-- Vista previa de la imagen -->
+<div style="margin: 10px 0;">
+  <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa" width="150" height="150" />
+</div>
+
+<!-- Campo para subir imagen (¡fuera del mat-form-field!) -->
+<div style="margin: 10px 0;">
+  <label for="fileInput">Seleccionar imagen:</label>
+  <input
+    id="fileInput"
+    type="file"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    style="display: block; margin-top: 5px;"
+  />
+</div>
+
+
+    <!-- Stock -->
+    <mat-form-field appearance="fill">
+      <mat-label>Stock</mat-label>
+      <input matInput type="number" [(ngModel)]="producto.stock" />
+    </mat-form-field>
+
+
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-raised-button color="primary" (click)="operate()">Guardar</button>
+      <button mat-raised-button color="warn" (click)="close()">Cancelar</button>
+    </div>
+  </div>
+</mat-dialog-content>

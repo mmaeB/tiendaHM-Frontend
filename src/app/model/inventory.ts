@@ -1,8 +1,9 @@
+import { Producto } from './producto';
+
 export interface Inventory {
   idInventory: number;
-  idProduct: number;
-  nombreProducto: string;
+  producto: Producto; 
   stockActual: number;
   stockMinimo: number;
-  ultimaActualizacion: string;
+  ultimaActualizacion: string; // ISO string
 }

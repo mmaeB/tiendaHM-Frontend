@@ -1,46 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Producto } from '../model/producto';
 import { Subject } from 'rxjs';
-import { Product } from '../model/product';
+import { GenericService } from './generic.service';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
-  private url: string = `${environment.HOST}/api/productos`;
+export class ProductoService extends GenericService<Producto>{
+  private productoChange: Subject<Producto[]> = new Subject<Producto[]>;
+  private messageChange: Subject<string> = new Subject<string>;
 
-  private productChange = new Subject<Product[]>();
-  private messageChange = new Subject<string>();
-
-  constructor(private http: HttpClient) {}
-
-  findAll() {
-    return this.http.get<Product[]>(this.url);
+  constructor() {
+    super(
+      inject(HttpClient),
+      `${environment.HOST}/productos`
+    );
   }
 
-  findById(id: number) {
-    return this.http.get<Product>(`${this.url}/${id}`);
-  }
-
-  save(product: Product) {
-    return this.http.post(this.url, product);
-  }
-
-  update(id: number, product: Product) {
-    return this.http.put(`${this.url}/${id}`, product);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
-  }
-
-  setProductChange(data: Product[]) {
-    this.productChange.next(data);
+  ///////////////////////////////////
+  
+  setProductChange(data: Producto[]) {
+    this.productoChange.next(data);
   }
 
   getProductChange() {
-    return this.productChange.asObservable();
+    return this.productoChange.asObservable();
   }
 
   setMessageChange(data: string) {
@@ -50,4 +36,12 @@ export class ProductService {
   getMessageChange() {
     return this.messageChange.asObservable();
   }
+
+saveWithImage(formData: FormData) {
+  return this.http.post<Producto>(`${environment.HOST}/productos/with-image`, formData);
+}
+
+updateWithImage(id: number, formData: FormData) {
+  return this.http.put<Producto>(`${environment.HOST}/productos/with-image/${id}`, formData);
+}
 }

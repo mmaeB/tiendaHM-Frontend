@@ -1,10 +1,10 @@
 import { Client } from './client';
-import { Product } from './product';
+import { Producto } from './producto';
 
 export interface Sale {
-  id_sale: number;
+  idSale: number;
+  client: Client;
+  product: Producto;
   cantidad: number;
-  fecha_venta: string;
-  client?: Client;
-  product?: Product;
+  fechaVenta: string; // ISO string
 }

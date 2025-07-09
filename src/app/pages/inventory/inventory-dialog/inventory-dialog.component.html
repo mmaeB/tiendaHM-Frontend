@@ -1,0 +1,41 @@
+<mat-dialog-content>
+  <mat-toolbar color="primary">
+    <span>Formulario de Inventario</span>
+  </mat-toolbar>
+
+  <div class="example-container">
+
+<!-- Producto -->
+<mat-form-field appearance="fill">
+  <mat-label>Producto</mat-label>
+  <mat-select [(ngModel)]="inventory.producto" [compareWith]="compareProduct">
+    @for (p of productos; track p) {
+      <mat-option [value]="p">{{ p.nombre }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+    <!-- Stock Actual -->
+    <mat-form-field appearance="fill">
+      <mat-label>Stock Actual</mat-label>
+      <input matInput type="number" [(ngModel)]="inventory.stockActual" />
+    </mat-form-field>
+
+    <!-- Stock Mínimo -->
+    <mat-form-field appearance="fill">
+      <mat-label>Stock Mínimo</mat-label>
+      <input matInput type="number" [(ngModel)]="inventory.stockMinimo" />
+    </mat-form-field>
+
+    <!-- Última Actualización -->
+    <mat-form-field appearance="fill">
+      <mat-label>Última Actualización</mat-label>
+      <input matInput type="datetime-local" [(ngModel)]="inventory.ultimaActualizacion" />
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-raised-button color="primary" (click)="operate()">Guardar</button>
+      <button mat-raised-button color="warn" (click)="close()">Cancelar</button>
+    </div>
+  </div>
+</mat-dialog-content>

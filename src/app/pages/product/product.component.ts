@@ -1,104 +1,150 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../model/product';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatIconModule } from '@angular/material/icon';
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { Component, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { switchMap } from 'rxjs';
+import { ProductoDialogComponent } from './product-dialog/product-dialog.component';
+import { RouterOutlet } from '@angular/router';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { Producto } from '../../model/producto';
+import { ProductoService } from '../../services/product.service';
+import { LoginService } from '../../services/login.service'; 
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-
+import { MatInputModule } from '@angular/material/input';
+import { ProductoDetailDialogComponent } from './product-details-dialog/product-details-dialog.component';
 
 @Component({
-  selector: 'app-book',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatTableModule, 
-    MatSortModule,
-    MatPaginatorModule,
+  selector: 'app-producto',
+   imports: [
+    MatTableModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatInput,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
-  ]
+    MatPaginatorModule,
+    MatSortModule,
+    RouterOutlet,
+    MatSnackBarModule,
+    MatDialogModule,
+    CommonModule,
+    MatInputModule
+  ],
+  templateUrl: './product.component.html',
+  styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnInit {
-  dataSource: MatTableDataSource<Product>;
-  
-columnsDefinitions = [
+export class ProductoComponent {
+  dataSource: MatTableDataSource<Producto>;
+  userRole: string = '';
+   showActions: boolean = false;
+
+  columnsDefinitions = [
+    { def: 'idProduct', label: 'ID', hide: true },
     { def: 'nombre', label: 'Nombre', hide: false },
-    { def: 'marca', label: 'Marca', hide: false },
+    { def: 'category', label: 'Categoría', hide: false },
     { def: 'precio', label: 'Precio', hide: false },
-    { def: 'stock', label: 'Stock', hide: false },  
-    { def: 'actions', label: 'Acciones', hide: false }
+    { def: 'descripcion', label: 'Descripción', hide: false },
+    { def: 'marca', label: 'Marca', hide: false },
+    { def: 'talla', label: 'Talla', hide: false },
+    { def: 'genero', label: 'Género', hide: false },
+    { def: 'equipo', label: 'Equipo', hide: false },
+    { def: 'imagen', label: 'Imagen', hide: false }, 
+    { def: 'stock', label: 'Stock', hide: false },
+      { def: 'details', label: 'Ver', hide: this.userRole === 'ROLE_ADMIN' }, // 👈
+  { def: 'actions', label: 'Acciones', hide: this.userRole !== 'ROLE_ADMIN' } // 👈
+    
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private productService: ProductService,
-    private snackBar: MatSnackBar
+  constructor(
+    private productService: ProductoService,
+    private _dialog: MatDialog,
+    private _snackBar: MatSnackBar,
+    private loginService: LoginService
+  ) { }
 
-  ){}
-  //publisherService = inject(PublisherService);
+ngOnInit(): void {
+    this.userRole = this.loginService.getRole();
+    this.showActions = this.userRole === 'ROLE_ADMIN'; // ⬅️ Esto activa los botones solo si es admin
 
-  ngOnInit(): void {
-    // this.publisherService.findAll().subscribe(data => console.log(data));
-    // this.publisherService.findAll().subscribe(data => this.publishers = data);
-    this.productService.findAll().subscribe((data) => {
-        this.createTable(data)
+    this.productService.findAll().subscribe(data => {
+      this.createTable(data);
     });
 
-  
-   this.productService.getMessageChange().subscribe(data => {
-  this.snackBar.open(data, 'INFO', {
-    duration: 2000,
-    horizontalPosition: 'right',
-    verticalPosition: 'bottom',
-  });
-});
+    this.productService.getProductChange().subscribe(data => this.createTable(data));
 
-}
-
-
-  //Metodo de creación de la tabla
-  createTable(data){
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.productService.getMessageChange().subscribe(
+      data =>
+        this._snackBar.open(data, 'INFO', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom'
+        })
+    );
   }
 
-  getDisplayedColumns() {
-    return this.columnsDefinitions.filter((cd) => !cd.hide).map((cd) => cd.def);
+  createTable(data: Producto[]) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(e: any) {
-    this.dataSource.filter = e.target.value.trim();
+    this.dataSource.filter = e.target.value.trim().toLowerCase();
   }
 
+getDisplayedColumns(): string[] {
+  if (this.isAdmin()) {
+    return this.columnsDefinitions.filter(c => !c.hide).map(c => c.def);
+  } else {
+    return ['nombre', 'category', 'precio', 'imagen', 'details'];
+  }
+}
+viewDetails(product: Producto) {
+  this._dialog.open(ProductoDetailDialogComponent, {
+    width: '750px',
+    data: { ...product, readOnly: true },
+    autoFocus: true
+  });
+}
 
-  //metodo para eliminar
-  delete(id: number){
+openDetails(product: Producto) {
+  this._dialog.open(ProductoDetailDialogComponent, {
+    width: '500px',
+    data: product
+  });
+}
+
+
+
+
+  delete(id: number) {
     this.productService.delete(id)
-    .pipe(switchMap(()=> this.productService.findAll()))
-    .subscribe(data=>{
-      this.productService.setProductChange(data);
-      this.productService.setMessageChange('Producto Eliminado');
-    }) 
+      .pipe(switchMap(() => this.productService.findAll()))
+      .subscribe(data => {
+        this.productService.setProductChange(data);
+        this.productService.setMessageChange('Producto eliminado');
+      });
+  }
+
+  openDialog(product?: Producto) {
+    setTimeout(() => {
+      this._dialog.open(ProductoDialogComponent, {
+        width: '750px',
+        data: product,
+        autoFocus: true
+      });
+    });
+  }
+
+  // Permite verificar si el usuario es admin
+  isAdmin(): boolean {
+    return this.userRole === 'ROLE_ADMIN';
   }
 }

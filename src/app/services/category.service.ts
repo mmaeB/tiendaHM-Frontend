@@ -1,40 +1,25 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { Category } from '../model/category';
+import { Subject } from 'rxjs';
+import { GenericService } from './generic.service';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
-  private url: string = `${environment.HOST}/api/categories`;
+export class CategoryService extends GenericService<Category>{
+  private categoryChange: Subject<Category[]> = new Subject<Category[]>;
+  private messageChange: Subject<string> = new Subject<string>;
 
-  private categoryChange = new Subject<Category[]>();
-  private messageChange = new Subject<string>();
-
-  constructor(private http: HttpClient) {}
-
-  findAll() {
-    return this.http.get<Category[]>(this.url);
+  constructor() {
+    super(
+      inject(HttpClient),
+      `${environment.HOST}/categories`
+    );
   }
 
-  findById(id: number) {
-    return this.http.get<Category>(`${this.url}/${id}`);
-  }
-
-  save(product: Category) {
-    return this.http.post(this.url, product);
-  }
-
-  update(id: number, product: Category) {
-    return this.http.put(`${this.url}/${id}`, product);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
-  }
-
+  ///////////////////////////////////
   setCategoryChange(data: Category[]) {
     this.categoryChange.next(data);
   }

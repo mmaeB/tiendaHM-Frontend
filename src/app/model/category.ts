@@ -1,6 +1,6 @@
 export interface Category {
   idCategory: number;
-  descripcion: string;
-  estado: boolean;
   nombre: string;
+  descripcion?: string;
+  estado: boolean;
 }

@@ -1,22 +1,14 @@
 import { Routes } from '@angular/router';
-import { InventoryComponent } from './pages/inventory/inventory.component';
-
-import { ProductComponent } from './pages/product/product.component';
-import { ProductEditComponent } from './pages/product/product-edit/product-edit.component';
-
+import { LoginComponent } from './login/login.component';
+import { LayoutComponent } from './pages/layout/layout.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  { path: 'login', component: LoginComponent},
   {
-    path: 'pages/inventory', component: InventoryComponent
-  },
-
-  {
-    path: 'pages/product',
-    component: ProductComponent,
-    children: [
-      { path: 'new', component: ProductEditComponent },
-      { path: 'edit/:id', component: ProductEditComponent }
-    ]
+    path:'pages', component: LayoutComponent,
+    loadChildren: () => 
+                    import('./pages/pages.routes')
+                    .then((x) => x.pagesRoutes)
   }
-
-]
+];

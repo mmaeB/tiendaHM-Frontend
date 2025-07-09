@@ -1,10 +1,10 @@
 export interface Client {
-  id_client: number;
-  apellido: string;
-  ciudad: string;
-  dni: string;
-  email: string;
-  fecha_inscripcion: string;
+  idClient: number;
   nombre: string;
-  telefono: string;
+  apellido: string;
+  email: string;
+  dni: string;
+  ciudad: string;
+  fechaInscripcion: string; 
+  telefono?: string;
 }

@@ -1,0 +1,56 @@
+<mat-dialog-content>
+  <mat-toolbar color="primary">
+    <span>Formulario de Cliente</span>
+  </mat-toolbar>
+
+  <div class="example-container">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="client.nombre" />
+    </mat-form-field>
+
+    <!-- Apellido -->
+    <mat-form-field appearance="fill">
+      <mat-label>Apellido</mat-label>
+      <input matInput [(ngModel)]="client.apellido" />
+    </mat-form-field>
+
+    <!-- DNI -->
+    <mat-form-field appearance="fill">
+      <mat-label>DNI</mat-label>
+      <input matInput [(ngModel)]="client.dni" />
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="client.email" />
+    </mat-form-field>
+
+    <!-- Teléfono -->
+    <mat-form-field appearance="fill">
+      <mat-label>Teléfono</mat-label>
+      <input matInput [(ngModel)]="client.telefono" />
+    </mat-form-field>
+
+    <!-- Ciudad -->
+    <mat-form-field appearance="fill">
+      <mat-label>Ciudad</mat-label>
+      <input matInput [(ngModel)]="client.ciudad" />
+    </mat-form-field>
+
+    <!-- Fecha de Inscripción -->
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de Inscripción</mat-label>
+      <input matInput type="datetime-local" [(ngModel)]="client.fechaInscripcion" />
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div style="margin-top: 20px;">
+      <button mat-raised-button color="primary" (click)="operate()">Guardar</button>
+      <button mat-raised-button color="warn" (click)="close()">Cancelar</button>
+    </div>
+  </div>
+</mat-dialog-content>
